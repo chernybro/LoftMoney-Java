@@ -1,0 +1,5 @@
+<resources>
+    <string name="expense">Расходы</string>
+    <string name="income">Доходы</string>
+    <string name="add__button_text">Добавить</string>
+</resources>
