@@ -34,15 +34,17 @@
     </EditText>
 
     <Button
+        android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:layout_marginTop="56dp"
+        android:enabled="false"
         app:layout_constraintTop_toBottomOf="@id/incomes_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/accent_color"
-        android:drawableLeft="@drawable/ic_add_green"
+        android:textColor="@drawable/selector_button"
+        android:drawableLeft="@drawable/selector_button_icon"
         android:text="@string/add__button_text">
     </Button>
 
