@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +27,9 @@ public class AddItemActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+                Toast.makeText(getApplicationContext(),
+                        "Пора покормить кота!",
+                        Toast.LENGTH_SHORT).show();  }
 
             @Override
             public void afterTextChanged(Editable editable) {
