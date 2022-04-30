@@ -72,7 +72,7 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
         public void bindItem(@NonNull final MoneyItem item) {
             // Вносим данные в элементы
             mTextView.setText(item.getName());
-            mAmountView.setText(String.valueOf(item.getAmount()));
+            mAmountView.setText(String.valueOf(item.getAmount()) + " ₽");
         }
     }
 }

@@ -14,9 +14,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Здесь просто перечислим наши вкладки
-    private final String[] fragmentsTitles = new String[] { "Incomes", "Expenses" };
-
     // Один из методов жц активити
     // Здесь находим элементы из нашей верстки и навешиваем всяких setOnClickListener и подобное
     @Override
@@ -32,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewpager);
         // Устанавливаем адаптер, он будет управлять списком наших фрагментов
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
+
+        //Здесь просто перечислим наши вкладки
+        final String[] fragmentsTitles = new String[] { getString(R.string.incomes), getString(R.string.expenses) };
 
         // Настраиваем наши вкладки, устанавливаем в них текст
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return fragmentsTitles.length; // здесь указываем сколько у нас фрагментов
+            return 2; // здесь указываем сколько у нас фрагментов
         }
     }
 

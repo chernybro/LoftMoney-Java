@@ -38,6 +38,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_amount"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/amount"
@@ -55,6 +56,7 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="56dp"
         android:enabled="false"
+
         app:layout_constraintTop_toBottomOf="@id/ti_amount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<!---> Это очень важный файл.
+Тут указываются все компоненты которые мы используем в приложении.
+Также указывается название приложения, его иконка, тема и многое другое <!-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chernybro.loftmoneyjava">
 
@@ -9,12 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoftMoneyJava">
+        <!---> Так мы указываем активити <!-->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <!---> Так мы указываем, что наше приложение стартует с MainActivity <!-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
