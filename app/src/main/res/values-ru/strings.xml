@@ -3,4 +3,5 @@
     <string name="income">Доходы</string>
     <string name="add__button_text">Добавить</string>
     <string name="amount">Amount</string>
+    <string name="incomes">Incomes</string>
 </resources>

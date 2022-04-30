@@ -5,4 +5,6 @@
     <string name="add__button_text">Add</string>
     <string name="amount">Amount</string>
     <string name="name">Name</string>
+    <string name="incomes">Incomes</string>
+    <string name="expenses">Expenses</string>
 </resources>
