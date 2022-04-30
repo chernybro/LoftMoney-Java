@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chernybro.loftmoneyjava.models.MoneyItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+// Фрагмент - часть пользовательского интерфейса, их может быть несколько на одном экране
+// не может существовать без activity, он к ней прикрепляется
+// из одного фрагмента можно перейти в другой, тогда организуется backstack
 public class BudgetFragment extends Fragment {
 
     // Ниже описаны переменные ключи и коды
