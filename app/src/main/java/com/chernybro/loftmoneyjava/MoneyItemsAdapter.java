@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chernybro.loftmoneyjava.models.MoneyItem;
@@ -12,24 +13,38 @@ import com.chernybro.loftmoneyjava.models.MoneyItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.ItemViewHolder> {
+// Это адаптер. Он нужен для RecyclerView.
+// Он управляет списком. Т.е. добавляет, удаляем элементы.
+public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.MoneyViewHolder> {
+    // Этим списком управляет адаптер
     private final List<MoneyItem> itemsList = new ArrayList<>();
+    // Цвет "стоимости" дохода расхода
+    private final int colorId;
 
-    @NonNull
-    @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        View itemView = View.inflate(parent.getContext(), R.layout.item_money, null);
-
-        return new ItemViewHolder(itemView);
+    public MoneyItemsAdapter(int colorId) {
+        this.colorId = colorId;
     }
 
+    // "Показываем" адаптеру как должна выглядить разметка одного элемента списка
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull final ItemViewHolder holder, final int position) {
+    public MoneyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        View itemView = View.inflate(parent.getContext(), R.layout.item_money, null);
+
+        return new MoneyViewHolder(itemView, colorId);
+    }
+
+    // Вносим данные из кода в элемент, который будет отображаться на экрана
+    @Override
+    public void onBindViewHolder(@NonNull final MoneyViewHolder holder, final int position) {
+        // Вносим данные из кода в элемент, который будет отображаться на экрана
         holder.bindItem(itemsList.get(position));
     }
 
+    // Просто добавляем один элемент путем добавления этого элемента в список, которым управляет адаптер
     public void addItem(MoneyItem item) {
         itemsList.add(item);
+        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
         notifyDataSetChanged();
     }
 
@@ -38,21 +53,26 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.It
         return itemsList.size();
     }
 
-    static class ItemViewHolder extends RecyclerView.ViewHolder {
+    // Класс, который содержит элементы разметки нашего одного элемента,
+    // в нем устанавливаются реальные данные
+    static class MoneyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mTextView;
-        private final TextView mPriceView;
+        private final TextView mAmountView;
 
-        public ItemViewHolder(@NonNull final View itemView) {
+        public MoneyViewHolder(@NonNull final View itemView, int colorId) {
             super(itemView);
-
+            // Находим элементы
             mTextView = itemView.findViewById(R.id.tv_name);
-            mPriceView = itemView.findViewById(R.id.tv_amount);
+            mAmountView = itemView.findViewById(R.id.tv_amount);
+            // Устанавливаем цвет для значения дохода или расхода
+            mAmountView.setTextColor(ContextCompat.getColor(mAmountView.getContext(), colorId));
         }
 
         public void bindItem(@NonNull final MoneyItem item) {
+            // Вносим данные в элементы
             mTextView.setText(item.getName());
-            mPriceView.setText(String.valueOf(item.getAmount()));
+            mAmountView.setText(String.valueOf(item.getAmount()));
         }
     }
 }

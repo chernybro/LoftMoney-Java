@@ -1,5 +1,6 @@
 package com.chernybro.loftmoneyjava.models;
 
+// Класс для данных которые мы потом будем отображать на экрана
 public class MoneyItem {
     private String name;
     private int amount;

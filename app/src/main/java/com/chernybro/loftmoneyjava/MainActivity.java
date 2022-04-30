@@ -1,82 +1,77 @@
 package com.chernybro.loftmoneyjava;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toolbar;
-
-import com.chernybro.loftmoneyjava.models.MoneyItem;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-// Hotkeys
-// ctrl a - выделить всё
-// ctrl c ctrl v ctrl x
-// ctrl z
-
-// ctrl d дублировать строку
-// shift shift поиск по проекту
-// ctrl f поиск по файлу
-// ctrl shift f поиск по файлам в проекте
-// tab - автозаполнение
-// alt enter - помощь от студии
-// shift delete - удалить строку
-// ctrl alt навести красоту
 public class MainActivity extends AppCompatActivity {
 
-    private static final String KEY_AMOUNT = "amount";
-    private static final String KEY_NAME = "name";
-    private static final int ADD_ITEM_REQUEST_CODE = 100;
+    //Здесь просто перечислим наши вкладки
+    private final String[] fragmentsTitles = new String[] { "Incomes", "Expenses" };
 
-    private MoneyItemsAdapter mAdapter;
-
+    // Один из методов жц активити
+    // Здесь находим элементы из нашей верстки и навешиваем всяких setOnClickListener и подобное
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // устанавливаем нашу разметку для этой активити
         setContentView(R.layout.activity_main);
-        FloatingActionButton addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(v ->
-                startActivityForResult(
-                        new Intent(MainActivity.this, AddItemActivity.class), ADD_ITEM_REQUEST_CODE));
 
-        RecyclerView recyclerView = findViewById(R.id.money_list);
+        // находим вью наших "вкладок"
+        TabLayout tabLayout = findViewById(R.id.tabs);
+
+        // инициализуруем пейджер, с помощью него будет листать фрагменты
+        ViewPager2 viewPager = findViewById(R.id.viewpager);
+        // Устанавливаем адаптер, он будет управлять списком наших фрагментов
+        viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
+
+        // Настраиваем наши вкладки, устанавливаем в них текст
+        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(fragmentsTitles[position]);
+            }
+        }).attach();
 
 
-        mAdapter = new MoneyItemsAdapter();
-        recyclerView.setAdapter(mAdapter);
-
-        mAdapter.addItem(new MoneyItem("Coffee", 300));
-        mAdapter.addItem(new MoneyItem("Межконтинентальная баллистическая ракета", 5_000_000_00));
     }
 
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_ITEM_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null)
-                mAdapter.addItem(
-                        new MoneyItem(
-                                data.getStringExtra(KEY_NAME),
-                                Integer.parseInt(data.getStringExtra(KEY_AMOUNT))
-                        )
-                );
+    // Это обычный адаптер для управления списком, мы создавали адаптер раньше для RecyclerView
+    private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
+
+        // Указываем конструктор для нашего адаптера
+        public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
+
+        // Этот метод будет вызываться каждый раз когда мы будем переключать вкладки.
+        // Тут мы указываем на какой фрагмент нам стоит переключиться на i-ой вкладке(счёт с нуля)
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return BudgetFragment.newInstance(R.color.income_color, getString(R.string.incomes));
+                case 1:
+                    return BudgetFragment.newInstance(R.color.expense_color, getString(R.string.expenses));
+                case 2:
+                     // Тут будет ещё фрагмент
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return fragmentsTitles.length; // здесь указываем сколько у нас фрагментов
         }
     }
 

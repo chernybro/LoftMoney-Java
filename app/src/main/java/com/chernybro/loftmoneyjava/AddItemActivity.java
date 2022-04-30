@@ -15,8 +15,11 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private static final String KEY_AMOUNT = "amount";
-    private static final String KEY_NAME = "name";
+    // Ниже описаны переменные ключи и коды
+    // статичные чтобы можно было обращаться извне без создания объекта
+    // final чтобы случайно где то не изменили
+    public static final String KEY_AMOUNT = "amount";
+    public static final String KEY_NAME = "name";
 
     private TextInputEditText nameEditText;
     private TextInputEditText amountEditText;
@@ -31,24 +34,26 @@ public class AddItemActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.et_name);
         amountEditText = findViewById(R.id.et_amount);
 
+        // Добавляем слежку за текстом
         setTextWatcher(nameEditText, addButton);
         setTextWatcher(amountEditText, addButton);
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                // Получаем заполненные поля
                 String name = nameEditText.getText().toString();
                 String price = amountEditText.getText().toString();
+                // Создаем интент в который ложим наш результат
+                Intent intent = new Intent();
+                intent.putExtra(KEY_NAME, name);
+                intent.putExtra(KEY_AMOUNT, price);
+                // Указываем что всё прошло хорошо, и интент с результатом
+                setResult(RESULT_OK, intent);
 
-                if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(price)) {
-                    Intent intent = new Intent();
-                    intent.putExtra(KEY_NAME, name);
-                    intent.putExtra(KEY_AMOUNT, price);
-
-                    setResult(RESULT_OK, intent);
-
-                    finish();
-                }
+                // Закрываем нашу активити, здесь мы всё сделали
+                finish();
             }
         });
     }
@@ -67,6 +72,8 @@ public class AddItemActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                // После того как пользователь закончил вводить текст, проверяем, не осталось ли поле пустым
+                // Если поле не пустое, включаем нашу кнопку(выключена по умолчанию в разметке)
                 if (!nameEditText.getText().toString().isEmpty() && !amountEditText.getText().toString().isEmpty()) {
                     addButton.setEnabled(true);
                 } else {
