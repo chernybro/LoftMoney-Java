@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava.models;
+package com.chernybro.loftmoneyjava.presentation.models;
 
 // Класс для данных которые мы потом будем отображать на экрана
 public class MoneyItem {

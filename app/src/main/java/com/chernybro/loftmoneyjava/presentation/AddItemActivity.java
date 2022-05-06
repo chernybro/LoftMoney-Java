@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava;
+package com.chernybro.loftmoneyjava.presentation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,9 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.chernybro.loftmoneyjava.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddItemActivity extends AppCompatActivity {
@@ -37,6 +39,11 @@ public class AddItemActivity extends AppCompatActivity {
         // Добавляем слежку за текстом
         setTextWatcher(nameEditText, addButton);
         setTextWatcher(amountEditText, addButton);
+
+        // Находим тулбар (верхняя плашка на экране)
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // При нажатии на кнопочку "назад" вернёмся на предыдущий экран
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
 
         addButton.setOnClickListener(new View.OnClickListener() {

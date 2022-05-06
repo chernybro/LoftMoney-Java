@@ -1,8 +1,8 @@
-package com.chernybro.loftmoneyjava;
+package com.chernybro.loftmoneyjava.presentation;
 
 import static android.app.Activity.RESULT_OK;
 
-import static com.chernybro.loftmoneyjava.AddItemActivity.KEY_AMOUNT;
+import static com.chernybro.loftmoneyjava.presentation.AddItemActivity.KEY_AMOUNT;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chernybro.loftmoneyjava.models.MoneyItem;
+import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.models.MoneyItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // Фрагмент - часть пользовательского интерфейса, их может быть несколько на одном экране
@@ -57,10 +58,9 @@ public class BudgetFragment extends Fragment {
 
         // Находим кнопку
         FloatingActionButton addButton = view.findViewById(R.id.add_button);
-        // Навешиваем на не листенера для запуска активити добавления элемента в список
-        addButton.setOnClickListener(v ->
-                startActivityForResult(
-                        new Intent(getActivity(), AddItemActivity.class), ADD_ITEM_REQUEST_CODE));
+        // Навешиваем на кнопку листенера для запуска активити добавления элемента в список
+        addButton.setOnClickListener(v -> startActivityForResult(
+                new Intent(getActivity(), AddItemActivity.class), ADD_ITEM_REQUEST_CODE));
 
         // Находим контейнер для нашего списка
         RecyclerView recyclerView = view.findViewById(R.id.budget_item_list);
