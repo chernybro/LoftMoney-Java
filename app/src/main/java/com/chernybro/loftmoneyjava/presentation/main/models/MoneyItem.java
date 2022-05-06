@@ -1,4 +1,6 @@
-package com.chernybro.loftmoneyjava.models;
+package com.chernybro.loftmoneyjava.presentation.main.models;
+
+import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
 
 // Класс для данных которые мы потом будем отображать на экрана
 public class MoneyItem {
@@ -25,4 +27,11 @@ public class MoneyItem {
     public void setAmount(final int amount) {
         this.amount = amount;
     }
+
+
+    public static MoneyItem getInstance(MoneyItemResponse moneyRemoteItem) {
+        return new MoneyItem(moneyRemoteItem.getName(), moneyRemoteItem.getPrice());
+    }
 }
+
+

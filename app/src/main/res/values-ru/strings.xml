@@ -6,4 +6,6 @@
     <string name="incomes">Доходы</string>
     <string name="name">Название</string>
     <string name="expenses">Расходы</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="login">login</string>
 </resources>

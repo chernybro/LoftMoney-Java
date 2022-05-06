@@ -1,17 +1,26 @@
-package com.chernybro.loftmoneyjava;
+package com.chernybro.loftmoneyjava.presentation.add_item;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.chernybro.loftmoneyjava.LoftApp;
+import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.BudgetFragment;
+import com.chernybro.loftmoneyjava.remote.MoneyApi;
 import com.google.android.material.textfield.TextInputEditText;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -23,6 +32,9 @@ public class AddItemActivity extends AppCompatActivity {
 
     private TextInputEditText nameEditText;
     private TextInputEditText amountEditText;
+    private MoneyApi moneyApi;
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,24 +50,41 @@ public class AddItemActivity extends AppCompatActivity {
         setTextWatcher(nameEditText, addButton);
         setTextWatcher(amountEditText, addButton);
 
+        // Находим тулбар (верхняя плашка на экране)
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // При нажатии на кнопочку "назад" вернёмся на предыдущий экран
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
+        moneyApi = ((LoftApp) getApplication()).moneyApi;
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 // Получаем заполненные поля
                 String name = nameEditText.getText().toString();
-                String price = amountEditText.getText().toString();
-                // Создаем интент в который ложим наш результат
-                Intent intent = new Intent();
-                intent.putExtra(KEY_NAME, name);
-                intent.putExtra(KEY_AMOUNT, price);
-                // Указываем что всё прошло хорошо, и интент с результатом
-                setResult(RESULT_OK, intent);
-
+                int price = Integer.parseInt(amountEditText.getText().toString());
+                Bundle arguments = getIntent().getExtras();
+                String type = arguments.getString(BudgetFragment.TYPE);
+                String token = getSharedPreferences(getString(R.string.app_name), 0).getString(LoftApp.AUTH_KEY, "");
+                Disposable disposable = moneyApi.addItem(price, name, type, token)
+                        // Подписываем функцию на новый поток
+                        .subscribeOn(Schedulers.io())
+                        // Указываем на каком потоке будем получать данные из функции
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> finish(),
+                                error -> Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT)
+                                        .show()
+                        );
+                compositeDisposable.add(disposable);
                 // Закрываем нашу активити, здесь мы всё сделали
-                finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 
     private void setTextWatcher(TextInputEditText editText, Button addButton) {

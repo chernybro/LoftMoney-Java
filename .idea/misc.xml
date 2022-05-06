@@ -12,8 +12,11 @@
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/drawable/ic_check_grey.xml" value="0.1615" />
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/drawable/selector_button.xml" value="0.1615" />
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/drawable/selector_button_icon.xml" value="0.1615" />
+        <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/drawable/selector_button_text.xml" value="0.1025" />
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/activity_add_item.xml" value="0.4" />
-        <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/activity_login.xml" value="0.4" />
+        <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/activity_splash.xml" value="0.13809320222317228" />
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/fragment_budget.xml" value="0.15519452757588714" />
         <entry key="..\:/Users/Cherny/AndroidStudioProjects/LoftMoneyJava/app/src/main/res/layout/item_money.xml" value="0.2696793002915452" />
       </map>

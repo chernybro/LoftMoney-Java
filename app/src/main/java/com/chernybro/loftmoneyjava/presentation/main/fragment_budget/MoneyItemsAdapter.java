@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava;
+package com.chernybro.loftmoneyjava.presentation.main.fragment_budget;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chernybro.loftmoneyjava.models.MoneyItem;
+import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,15 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
         // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
         notifyDataSetChanged();
     }
+
+    // Просто добавляем один элемент путем добавления этого элемента в список, которым управляет адаптер
+    public void setData(List<MoneyItem> items) {
+        itemsList.clear();
+        itemsList.addAll(items);
+        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {
