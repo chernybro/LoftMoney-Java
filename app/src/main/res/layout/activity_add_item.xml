@@ -11,15 +11,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            android:theme="@style/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="?homeAsUpIndicator"
             app:navigationIconTint="@color/cardview_dark_background"
             app:title="Add new income/expense">
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -85,7 +86,7 @@
         android:layout_marginTop="56dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/selector_button_icon"
-        android:enabled="true"
+        android:enabled="false"
         android:text="@string/add__button_text"
         android:textColor="@drawable/selector_button_text"
         app:layout_constraintEnd_toEndOf="parent"
