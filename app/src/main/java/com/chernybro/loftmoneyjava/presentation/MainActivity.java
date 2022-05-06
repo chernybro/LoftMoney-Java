@@ -1,6 +1,9 @@
 package com.chernybro.loftmoneyjava.presentation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +13,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.chernybro.loftmoneyjava.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
+
+    private int currentPosition = 0;
 
     // Один из методов жц активити
     // Здесь находим элементы из нашей верстки и навешиваем всяких setOnClickListener и подобное
@@ -31,8 +37,34 @@ public class MainActivity extends AppCompatActivity {
         // Устанавливаем адаптер, он будет управлять списком наших фрагментов
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
 
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentPosition = position;
+            }
+        });
+
+        // Находим кнопку
+        FloatingActionButton addButton = findViewById(R.id.add_button);
+        // Навешиваем на кнопку листенера для запуска активити добавления элемента в список
+
+
+        Intent intent = new Intent(this, AddItemActivity.class);
+
+        addButton.setOnClickListener(v -> {
+            String type = "0";
+            if (currentPosition == 0) {
+                type = "income";
+            } else if (currentPosition == 1) {
+                type = "expense";
+            }
+            intent.putExtra(BudgetFragment.TYPE, type);
+            startActivity(intent);
+        });
+
         //Здесь просто перечислим наши вкладки
-        final String[] fragmentsTitles = new String[] { getString(R.string.incomes), getString(R.string.expenses) };
+        final String[] fragmentsTitles = new String[]{getString(R.string.incomes), getString(R.string.expenses)};
 
         // Настраиваем наши вкладки, устанавливаем в них текст
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -47,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Это обычный адаптер для управления списком, мы создавали адаптер раньше для RecyclerView
     private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
+        private Fragment mCurrentFragment;
+
+        public Fragment getCurrentFragment() {
+            return mCurrentFragment;
+        }
 
         // Указываем конструктор для нашего адаптера
         public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -60,15 +97,16 @@ public class MainActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return BudgetFragment.newInstance(R.color.income_color, getString(R.string.incomes));
+                    return BudgetFragment.newInstance(R.color.income_color, getString(R.string.income));
                 case 1:
-                    return BudgetFragment.newInstance(R.color.expense_color, getString(R.string.expenses));
+                    return BudgetFragment.newInstance(R.color.expense_color, getString(R.string.expense));
                 case 2:
-                     // Тут будет ещё фрагмент
+                    // Тут будет ещё фрагмент
                 default:
                     return null;
             }
         }
+
 
         @Override
         public int getItemCount() {

@@ -49,6 +49,15 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
         notifyDataSetChanged();
     }
 
+    // Просто добавляем один элемент путем добавления этого элемента в список, которым управляет адаптер
+    public void setData(List<MoneyItem> items) {
+        itemsList.clear();
+        itemsList.addAll(items);
+        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public int getItemCount() {
         return itemsList.size();

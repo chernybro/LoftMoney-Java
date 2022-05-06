@@ -7,4 +7,5 @@
     <string name="name">Name</string>
     <string name="incomes">Incomes</string>
     <string name="expenses">Expenses</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

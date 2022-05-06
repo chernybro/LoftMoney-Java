@@ -57,4 +57,16 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // библиотека rx для Java
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+
+    // Авторизация гугл
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+
+
+    // ViewModel
+    def lifecycle_version = "2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }
