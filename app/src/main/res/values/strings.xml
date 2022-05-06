@@ -9,8 +9,5 @@
     <string name="expenses">Expenses</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="login">Login</string>
-    
 
-    <string name="client_id">199201091095-b7o2qd5ffak3u61db9uo8190poir7amq.apps.googleusercontent.com</string>
-    <string name="client_secret">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</string>
 </resources>
