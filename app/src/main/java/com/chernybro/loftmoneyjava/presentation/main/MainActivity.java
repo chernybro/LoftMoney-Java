@@ -1,9 +1,7 @@
-package com.chernybro.loftmoneyjava.presentation;
+package com.chernybro.loftmoneyjava.presentation.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +11,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.add_item.AddItemActivity;
+import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.BudgetFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

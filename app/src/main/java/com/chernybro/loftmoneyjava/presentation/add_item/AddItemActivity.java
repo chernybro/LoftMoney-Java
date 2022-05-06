@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava.presentation;
+package com.chernybro.loftmoneyjava.presentation.add_item;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.chernybro.loftmoneyjava.LoftApp;
 import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.BudgetFragment;
 import com.chernybro.loftmoneyjava.remote.MoneyApi;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -63,18 +64,16 @@ public class AddItemActivity extends AppCompatActivity {
                 int price = Integer.parseInt(amountEditText.getText().toString());
                 Bundle arguments = getIntent().getExtras();
                 String type = arguments.getString(BudgetFragment.TYPE);
-                Disposable disposable = moneyApi.addItem(price, name, type)
+                String token = getSharedPreferences(getString(R.string.app_name), 0).getString(LoftApp.AUTH_KEY, "");
+                Disposable disposable = moneyApi.addItem(price, name, type, token)
                         // Подписываем функцию на новый поток
                         .subscribeOn(Schedulers.io())
                         // Указываем на каком потоке будем получать данные из функции
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                moneyListResponse -> {
-                                    finish();
-                                }, error -> {
-                                    Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
+                                () -> finish(),
+                                error -> Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT)
+                                        .show()
                         );
                 compositeDisposable.add(disposable);
                 // Закрываем нашу активити, здесь мы всё сделали

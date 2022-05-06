@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava.presentation;
+package com.chernybro.loftmoneyjava.presentation.main.fragment_budget;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chernybro.loftmoneyjava.R;
-import com.chernybro.loftmoneyjava.presentation.models.MoneyItem;
+import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
 
 import java.util.ArrayList;
 import java.util.List;

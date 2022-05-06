@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava.presentation.models;
+package com.chernybro.loftmoneyjava.presentation.main.models;
 
 import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
 
