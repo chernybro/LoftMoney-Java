@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,6 +33,8 @@ public class BudgetFragment extends Fragment {
 
     // Это наш адаптер, он управляет списком (добавить элемент, удалить и т.п.)
     private MoneyItemsAdapter adapter;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     // Мы создали этот метод, чтобы при создании фрагмента задавать ему параметры
     public static BudgetFragment newInstance(final int colorId, final String type) {
@@ -59,10 +62,9 @@ public class BudgetFragment extends Fragment {
         // Находим контейнер для нашего списка
         RecyclerView recyclerView = view.findViewById(R.id.budget_item_list);
 
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             loadItems();
-            swipeRefreshLayout.setRefreshing(false);
         });
 
         // Проверяем, не забыли ли положить аргументы при создании фрагмента
@@ -109,6 +111,10 @@ public class BudgetFragment extends Fragment {
             if (message > 0) {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        budgetViewModel.isRefreshing.observe(getViewLifecycleOwner(), isRefreshing -> {
+            swipeRefreshLayout.setRefreshing(isRefreshing);
         });
     }
 

@@ -2,6 +2,7 @@ package com.chernybro.loftmoneyjava.presentation.main.fragment_budget;
 
 import android.content.SharedPreferences;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -20,9 +21,18 @@ import io.reactivex.schedulers.Schedulers;
 public class BudgetViewModel extends ViewModel {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    public MutableLiveData<List<MoneyItem>> moneyItemsList = new MutableLiveData<>();
-    public MutableLiveData<String> messageString = new MutableLiveData<>("");
-    public MutableLiveData<Integer> messageInt = new MutableLiveData<>(-1);
+
+    private final MutableLiveData<List<MoneyItem>> _moneyItemsList = new MutableLiveData<>();
+    public LiveData<List<MoneyItem>> moneyItemsList = _moneyItemsList;
+
+    private final MutableLiveData<String> _messageString = new MutableLiveData<>("");
+    public LiveData<String> messageString = _messageString;
+
+    private final MutableLiveData<Integer> _messageInt = new MutableLiveData<>(-1);
+    public LiveData<Integer> messageInt = _messageInt;
+
+    private final MutableLiveData<Boolean> _isRefreshing = new MutableLiveData<>(false);
+    public LiveData<Boolean> isRefreshing = _isRefreshing;
 
     @Override
     protected void onCleared() {
@@ -43,9 +53,11 @@ public class BudgetViewModel extends ViewModel {
                         moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
                     }
 
-                    moneyItemsList.postValue(moneyItems);
+                    _moneyItemsList.postValue(moneyItems);
+                    _isRefreshing.postValue(false);
                 }, throwable -> {
-                    messageString.postValue(throwable.getLocalizedMessage());
+                    _messageString.postValue(throwable.getLocalizedMessage());
+                    _isRefreshing.postValue(false);
                 }));
     }
 }

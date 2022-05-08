@@ -24,12 +24,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    // Ниже описаны переменные ключи и коды
-    // статичные чтобы можно было обращаться извне без создания объекта
-    // final чтобы случайно где то не изменили
-    public static final String KEY_AMOUNT = "amount";
-    public static final String KEY_NAME = "name";
-
     private TextInputEditText nameEditText;
     private TextInputEditText amountEditText;
     private MoneyApi moneyApi;
@@ -71,12 +65,15 @@ public class AddItemActivity extends AppCompatActivity {
                         // Указываем на каком потоке будем получать данные из функции
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> finish(),
-                                error -> Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT)
-                                        .show()
+                                () -> {
+                                    finish();
+                                },
+                                error -> {
+                                    Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT)
+                                            .show();
+                                }
                         );
                 compositeDisposable.add(disposable);
-                // Закрываем нашу активити, здесь мы всё сделали
             }
         });
     }

@@ -19,7 +19,10 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int currentPosition = 0;
+    private int currentFragmentPosition = 0;
+
+    private static final int incomeFragmentPosition = 0;
+    private static final int expenseFragmentPosition = 1;
 
     // Один из методов жц активити
     // Здесь находим элементы из нашей верстки и навешиваем всяких setOnClickListener и подобное
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                currentPosition = position;
+                currentFragmentPosition = position;
             }
         });
 
@@ -54,10 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
         addButton.setOnClickListener(v -> {
             String type = "0";
-            if (currentPosition == 0) {
-                type = "income";
-            } else if (currentPosition == 1) {
-                type = "expense";
+            switch (currentFragmentPosition) {
+                case incomeFragmentPosition:
+                    type = "income";
+                    break;
+                case expenseFragmentPosition:
+                    type = "expense";
+                    break;
             }
             intent.putExtra(BudgetFragment.TYPE, type);
             startActivity(intent);
@@ -79,11 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Это обычный адаптер для управления списком, мы создавали адаптер раньше для RecyclerView
     private class ViewPagerFragmentAdapter extends FragmentStateAdapter {
-        private Fragment mCurrentFragment;
-
-        public Fragment getCurrentFragment() {
-            return mCurrentFragment;
-        }
 
         // Указываем конструктор для нашего адаптера
         public ViewPagerFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -96,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
             switch (position) {
-                case 0:
+                case incomeFragmentPosition:
                     return BudgetFragment.newInstance(R.color.income_color, getString(R.string.income));
-                case 1:
+                case expenseFragmentPosition:
                     return BudgetFragment.newInstance(R.color.expense_color, getString(R.string.expense));
                 case 2:
                     // Тут будет ещё фрагмент

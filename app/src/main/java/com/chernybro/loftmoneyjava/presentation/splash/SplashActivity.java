@@ -1,4 +1,4 @@
-package com.chernybro.loftmoneyjava.presentation;
+package com.chernybro.loftmoneyjava.presentation.splash;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +18,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), 0);
         String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");

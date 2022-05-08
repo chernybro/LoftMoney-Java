@@ -26,16 +26,16 @@
         </activity>
         <activity
             android:name=".presentation.add_item.AddItemActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <activity
-            android:name=".presentation.SplashActivity"
+            android:name=".presentation.splash.SplashActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <!---> Так мы указываем, что наше приложение стартует с MainActivity <!-->
+                <!---> Так мы указываем, что наше приложение стартует с SplashActivity <!-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
