@@ -18,6 +18,13 @@ import com.chernybro.loftmoneyjava.LoftApp;
 import com.chernybro.loftmoneyjava.R;
 import com.chernybro.loftmoneyjava.presentation.main.EditModeListener;
 import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
+import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 // Фрагмент - часть пользовательского интерфейса, их может быть несколько на одном экране
 // не может существовать без activity, он к ней прикрепляется
@@ -141,6 +148,12 @@ public class BudgetFragment extends Fragment implements MoneyEditListener {
             }
         });
 
+        budgetViewModel.removeItemDoneSuccess.observe(getViewLifecycleOwner(), success -> {
+            if (success) {
+                loadItems();
+            }
+        });
+
         budgetViewModel.moneyItemsList.observe(getViewLifecycleOwner(), moneyItems -> {
             adapter.setData(moneyItems);
         });
@@ -180,7 +193,12 @@ public class BudgetFragment extends Fragment implements MoneyEditListener {
         budgetViewModel.setEditMode(false);
         budgetViewModel.resetSelectedCounter();
         // TODO: сделать удаление через сервер
-        adapter.deleteSelectedItems();
+        budgetViewModel.removeItem(
+                ((LoftApp) getActivity().getApplication()).moneyApi,
+                getActivity().getSharedPreferences(getString(R.string.app_name), 0),
+                adapter.getMoneyItemList()
+        );
+        // adapter.deleteSelectedItems();
     }
 
     private void checkSelectedCount() {

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
     private TabLayout tabLayout;
     private TextView actionTitle;
     private ViewPager2 viewPager;
+    private FloatingActionButton addButton;
 
     private static final int incomeFragmentPosition = 0;
     private static final int expenseFragmentPosition = 1;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
 
     private void configureAddItemButton() {
         // Находим кнопку
-        FloatingActionButton addButton = findViewById(R.id.add_button);
+        addButton = findViewById(R.id.add_button);
         // Навешиваем на кнопку листенера для запуска активити добавления элемента в список
 
         Intent intent = new Intent(this, AddItemActivity.class);
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
                     break;
             }
             intent.putExtra(BudgetFragment.TYPE, type);
+
             startActivity(intent);
         });
     }
@@ -151,6 +153,12 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
 
     @Override
     public void onEditModeChanged(boolean status) {
+        if (status) {
+            addButton.hide();
+        } else {
+            addButton.show();
+        }
+
         toolbar.setBackgroundColor(ContextCompat.getColor(this,
                 status ? R.color.primary_color_second : R.color.primary_color));
         actionDelete.setVisibility(status ? View.VISIBLE : View.GONE);
