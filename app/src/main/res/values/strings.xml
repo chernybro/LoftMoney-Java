@@ -9,5 +9,6 @@
     <string name="expenses">Expenses</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="login">Login</string>
+    <string name="budget_accounting">Budget accounting</string>
 
 </resources>
