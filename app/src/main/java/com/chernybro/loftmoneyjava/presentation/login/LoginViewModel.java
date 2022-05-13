@@ -1,5 +1,6 @@
 package com.chernybro.loftmoneyjava.presentation.login;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,9 +12,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoginViewModel extends ViewModel {
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    public MutableLiveData<String> messageString = new MutableLiveData<>("");
-    public MutableLiveData<String> authToken = new MutableLiveData<>("");
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    private final MutableLiveData<String> _messageString = new MutableLiveData<>("");
+    public LiveData<String> messageString = _messageString;
+
+    private final MutableLiveData<String> _authToken = new MutableLiveData<>("");
+    public LiveData<String> authToken = _authToken;
 
     @Override
     protected void onCleared() {
@@ -26,9 +31,9 @@ public class LoginViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(authResponse -> {
-                    authToken.postValue(authResponse.getAuthToken());
+                    _authToken.postValue(authResponse.getAuthToken());
                 }, throwable -> {
-                    messageString.postValue(throwable.getLocalizedMessage());
+                    _messageString.postValue(throwable.getLocalizedMessage());
                 }));
     }
 }
