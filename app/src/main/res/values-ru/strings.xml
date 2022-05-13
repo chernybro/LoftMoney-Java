@@ -9,4 +9,7 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="login">Login</string>
     <string name="budget_accounting">Учёт бюджета</string>
+    <string name="delete_items_title">Delete items</string>
+    <string name="action_no">No</string>
+    <string name="action_yes">Yes</string>
 </resources>

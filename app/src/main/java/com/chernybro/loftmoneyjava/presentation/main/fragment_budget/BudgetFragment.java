@@ -16,11 +16,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chernybro.loftmoneyjava.LoftApp;
 import com.chernybro.loftmoneyjava.R;
+import com.chernybro.loftmoneyjava.presentation.main.EditModeListener;
+import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
 
 // Фрагмент - часть пользовательского интерфейса, их может быть несколько на одном экране
 // не может существовать без activity, он к ней прикрепляется
 // из одного фрагмента можно перейти в другой, тогда организуется backstack
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements MoneyEditListener {
 
     // Ниже описаны переменные ключи и коды
     // статичные чтобы можно было обращаться извне без создания объекта
@@ -37,13 +39,47 @@ public class BudgetFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     // Мы создали этот метод, чтобы при создании фрагмента задавать ему параметры
-    public static BudgetFragment newInstance(final int colorId, final String type) {
+    public static BudgetFragment newInstance(final int colorId, final int typeId) {
         BudgetFragment budgetFragment = new BudgetFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(COLOR_ID, colorId);
-        bundle.putString(TYPE, type);
+        bundle.putInt(TYPE, typeId);
         budgetFragment.setArguments(bundle);
         return budgetFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        // Проверяем, не забыли ли положить аргументы при создании фрагмента
+        if (getArguments() != null) {
+            // Устанавливаем цвет для который положили в аргументы при создании фрагмента
+            adapter = new MoneyItemsAdapter(getArguments().getInt(COLOR_ID));
+            type = getString(getArguments().getInt(TYPE));
+        } else {
+            adapter = new MoneyItemsAdapter(R.color.purple_500);
+        }
+        adapter.setMoneyCellAdapterClick(new MoneyItemAdapterClick() {
+            @Override
+            public void onCellClick(MoneyItem moneyItem) {
+                if (budgetViewModel.isEditMode.getValue()) {
+                    moneyItem.setSelected(!moneyItem.isSelected());
+                    adapter.updateItem(moneyItem);
+                    checkSelectedCount();
+                }
+            }
+
+            @Override
+            public void onLongCellClick(MoneyItem moneyItem) {
+                if (!budgetViewModel.isEditMode.getValue()) {
+                    moneyItem.setSelected(true);
+                    adapter.updateItem(moneyItem);
+                    budgetViewModel.setEditMode(true);
+                    checkSelectedCount();
+                }
+            }
+        });
     }
 
     // Метод жц фрагмента, тут мы указываем какую разметку должен показать фрагмент
@@ -57,8 +93,14 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         configureViewModel();
 
+        configureViews(view);
+
+    }
+
+    private void configureViews(View view) {
         // Находим контейнер для нашего списка
         RecyclerView recyclerView = view.findViewById(R.id.budget_item_list);
 
@@ -67,23 +109,13 @@ public class BudgetFragment extends Fragment {
             loadItems();
         });
 
-        // Проверяем, не забыли ли положить аргументы при создании фрагмента
-        if (getArguments() != null) {
-            // Устанавливаем цвет для который положили в аргументы при создании фрагмента
-            adapter = new MoneyItemsAdapter(getArguments().getInt(COLOR_ID));
-            type = getArguments().getString(TYPE);
-        } else {
-            adapter = new MoneyItemsAdapter(R.color.purple_500);
-        }
         // Устанавливаем адаптер для списка
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         loadItems();
     }
 
@@ -94,9 +126,21 @@ public class BudgetFragment extends Fragment {
                 type
         );
     }
-    
+
     private void configureViewModel() {
-        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+
+        budgetViewModel.isEditMode.observe(getViewLifecycleOwner(), isEditMode -> {
+            if (getActivity() instanceof EditModeListener) {
+                ((EditModeListener) getActivity()).onEditModeChanged(isEditMode);
+            }
+        });
+
+        budgetViewModel.selectedCounter.observe(getViewLifecycleOwner(), newCount -> {
+            if (getActivity() instanceof EditModeListener) {
+                ((EditModeListener) getActivity()).onCounterChanged(newCount);
+            }
+        });
+
         budgetViewModel.moneyItemsList.observe(getViewLifecycleOwner(), moneyItems -> {
             adapter.setData(moneyItems);
         });
@@ -118,4 +162,35 @@ public class BudgetFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onClearEdit() {
+        budgetViewModel.setEditMode(false);
+        budgetViewModel.resetSelectedCounter();
+
+        for (MoneyItem moneyItem : adapter.getMoneyItemList()) {
+            if (moneyItem.isSelected()) {
+                moneyItem.setSelected(false);
+                adapter.updateItem(moneyItem);
+            }
+        }
+    }
+
+    @Override
+    public void onClearSelectedClick() {
+        budgetViewModel.setEditMode(false);
+        budgetViewModel.resetSelectedCounter();
+        // TODO: сделать удаление через сервер
+        adapter.deleteSelectedItems();
+    }
+
+    private void checkSelectedCount() {
+        int selectedItemsCount = 0;
+        for (MoneyItem moneyItem : adapter.getMoneyItemList()) {
+            if (moneyItem.isSelected()) {
+                selectedItemsCount++;
+            }
+        }
+
+        budgetViewModel.setSelectedItemsCount(selectedItemsCount);
+    }
 }

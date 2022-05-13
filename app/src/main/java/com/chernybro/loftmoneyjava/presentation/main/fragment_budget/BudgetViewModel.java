@@ -34,6 +34,12 @@ public class BudgetViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isRefreshing = new MutableLiveData<>(false);
     public LiveData<Boolean> isRefreshing = _isRefreshing;
 
+    private final MutableLiveData<Boolean> _isEditMode = new MutableLiveData<>(false);
+    public LiveData<Boolean> isEditMode = _isEditMode;
+
+    private final MutableLiveData<Integer> _selectedCounter = new MutableLiveData<>(-1);
+    public LiveData<Integer> selectedCounter = _selectedCounter;
+
     @Override
     protected void onCleared() {
         compositeDisposable.dispose();
@@ -59,5 +65,17 @@ public class BudgetViewModel extends ViewModel {
                     _messageString.postValue(throwable.getLocalizedMessage());
                     _isRefreshing.postValue(false);
                 }));
+    }
+
+    public void setEditMode(boolean isEditMode) {
+        _isEditMode.postValue(isEditMode);
+    }
+
+    public void setSelectedItemsCount(int selectedItemsCount) {
+        _selectedCounter.postValue(selectedItemsCount);
+    }
+
+    public void resetSelectedCounter() {
+        _selectedCounter.postValue(-1);
     }
 }
