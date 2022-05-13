@@ -5,24 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:contentInsetStart="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:theme="@style/Toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="?homeAsUpIndicator"
-            app:navigationIconTint="@color/cardview_dark_background"
-            app:title="Add new income/expense">
+            android:layout_height="match_parent">
 
-        </com.google.android.material.appbar.MaterialToolbar>
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_back"
+                android:visibility="visible" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:id="@+id/tv_action_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="20dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/add_item_title"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -87,7 +106,7 @@
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/selector_button_icon"
         android:enabled="false"
-        android:text="@string/add__button_text"
+        android:text="@string/add_button_text"
         android:textColor="@drawable/selector_button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

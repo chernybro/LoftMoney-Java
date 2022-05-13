@@ -1,11 +1,18 @@
 <resources>
     <string name="expense">Расходы</string>
     <string name="income">Доходы</string>
-    <string name="add__button_text">Добавить</string>
-    <string name="amount">Amount</string>
+    <string name="add_button_text">Добавить</string>
+    <string name="amount">Сумма</string>
     <string name="incomes">Доходы</string>
     <string name="name">Название</string>
     <string name="expenses">Расходы</string>
-    <string name="something_went_wrong">Something went wrong</string>
-    <string name="login">login</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="login">Login</string>
+    <string name="budget_accounting">Учёт бюджета</string>
+    <string name="delete_items_title">Удаление элементов</string>
+    <string name="action_no">Нет</string>
+    <string name="action_yes">Да</string>
+    <string name="delete_items_message">Вы действительно хотите удалить выбранные элементы?</string>
+    <string name="selected">Выбрано: %d</string>
+    <string name="add_item_title">Добавление элемента</string>
 </resources>

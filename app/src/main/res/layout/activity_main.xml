@@ -8,27 +8,52 @@
     android:background="@drawable/background"
     tools:context=".presentation.main.MainActivity">
 
-
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/app_bar"
-        app:elevation="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:contentInsetStart="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="0dp"
-            android:theme="@style/Toolbar"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:title="LoftMoney">
+            android:layout_height="match_parent">
 
-        </com.google.android.material.appbar.MaterialToolbar>
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_back"
+                android:visibility="gone" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:id="@+id/tv_action_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="20dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/budget_accounting"
+                android:layout_weight="1"
+                tools:ignore="SpUsage" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:padding="16dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_bucket" />
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <!--> Эта вью нужна для того чтобы отображались наши вкладки <!-->
     <com.google.android.material.tabs.TabLayout
@@ -38,7 +63,7 @@
         app:tabSelectedTextColor="@color/accent_color"
         app:tabIndicatorColor="@color/accent_second"
         android:background="@color/primary_color"
-        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:tabTextColor="@android:color/white"/>
 

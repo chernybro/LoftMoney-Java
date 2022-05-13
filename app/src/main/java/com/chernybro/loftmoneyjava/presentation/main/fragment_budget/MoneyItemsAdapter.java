@@ -1,5 +1,6 @@
 package com.chernybro.loftmoneyjava.presentation.main.fragment_budget;
 
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,11 +20,48 @@ import java.util.List;
 public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.MoneyViewHolder> {
     // Этим списком управляет адаптер
     private final List<MoneyItem> itemsList = new ArrayList<>();
+
     // Цвет "стоимости" дохода расхода
     private final int colorId;
 
+    private MoneyItemAdapterClick moneyCellAdapterClick;
+
     public MoneyItemsAdapter(int colorId) {
         this.colorId = colorId;
+    }
+
+    public List<MoneyItem> getMoneyItemList() {
+        return itemsList;
+    }
+
+    public void updateItem(MoneyItem moneyItem) {
+        int itemPosition = itemsList.indexOf(moneyItem);
+        itemsList.set(itemPosition, moneyItem);
+        notifyItemChanged(itemPosition);
+    }
+
+    // Просто добавляем наши элементы в список, которым управляет адаптер
+    public void setData(List<MoneyItem> items) {
+        itemsList.clear();
+        itemsList.addAll(items);
+        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
+        notifyDataSetChanged();
+    }
+
+    public void deleteSelectedItems() {
+        List<MoneyItem> selectedItems = new ArrayList<>();
+        for (MoneyItem moneyItem : itemsList) {
+            if (moneyItem.isSelected()) {
+                selectedItems.add(moneyItem);
+            }
+        }
+
+        itemsList.removeAll(selectedItems);
+        notifyDataSetChanged();
+    }
+
+    public void setMoneyCellAdapterClick(MoneyItemAdapterClick moneyCellAdapterClick) {
+        this.moneyCellAdapterClick = moneyCellAdapterClick;
     }
 
     // "Показываем" адаптеру как должна выглядить разметка одного элемента списка
@@ -31,8 +69,7 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
     @Override
     public MoneyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         View itemView = View.inflate(parent.getContext(), R.layout.item_money, null);
-
-        return new MoneyViewHolder(itemView, colorId);
+        return new MoneyViewHolder(itemView, colorId, moneyCellAdapterClick);
     }
 
     // Вносим данные из кода в элемент, который будет отображаться на экрана
@@ -40,21 +77,6 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
     public void onBindViewHolder(@NonNull final MoneyViewHolder holder, final int position) {
         // Вносим данные из кода в элемент, который будет отображаться на экрана
         holder.bindItem(itemsList.get(position));
-    }
-
-    // Просто добавляем один элемент путем добавления этого элемента в список, которым управляет адаптер
-    public void addItem(MoneyItem item) {
-        itemsList.add(item);
-        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
-        notifyDataSetChanged();
-    }
-
-    // Просто добавляем один элемент путем добавления этого элемента в список, которым управляет адаптер
-    public void setData(List<MoneyItem> items) {
-        itemsList.clear();
-        itemsList.addAll(items);
-        // Говорим адаптеру, что список изменился, чтобы он отобразил актуальный список
-        notifyDataSetChanged();
     }
 
 
@@ -69,20 +91,45 @@ public class MoneyItemsAdapter extends RecyclerView.Adapter<MoneyItemsAdapter.Mo
 
         private final TextView mTextView;
         private final TextView mAmountView;
+        private MoneyItemAdapterClick moneyItemAdapterClick;
 
-        public MoneyViewHolder(@NonNull final View itemView, int colorId) {
+        public MoneyViewHolder(@NonNull final View itemView, int colorId, MoneyItemAdapterClick moneyItemAdapterClick) {
             super(itemView);
             // Находим элементы
             mTextView = itemView.findViewById(R.id.tv_name);
             mAmountView = itemView.findViewById(R.id.tv_amount);
             // Устанавливаем цвет для значения дохода или расхода
             mAmountView.setTextColor(ContextCompat.getColor(mAmountView.getContext(), colorId));
+
+            this.moneyItemAdapterClick = moneyItemAdapterClick;
         }
 
         public void bindItem(@NonNull final MoneyItem item) {
             // Вносим данные в элементы
             mTextView.setText(item.getName());
             mAmountView.setText(String.valueOf(item.getAmount()) + " ₽");
+
+            itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(),
+                    item.isSelected() ? R.color.primary_color_second : android.R.color.white));
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (moneyItemAdapterClick != null) {
+                        moneyItemAdapterClick.onCellClick(item);
+                    }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (moneyItemAdapterClick != null) {
+                        moneyItemAdapterClick.onLongCellClick(item);
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

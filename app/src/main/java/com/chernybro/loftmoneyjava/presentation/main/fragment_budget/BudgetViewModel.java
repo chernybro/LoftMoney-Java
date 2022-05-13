@@ -1,12 +1,14 @@
 package com.chernybro.loftmoneyjava.presentation.main.fragment_budget;
 
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.chernybro.loftmoneyjava.LoftApp;
+import com.chernybro.loftmoneyjava.R;
 import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
 import com.chernybro.loftmoneyjava.remote.MoneyApi;
 import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
@@ -34,6 +36,15 @@ public class BudgetViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isRefreshing = new MutableLiveData<>(false);
     public LiveData<Boolean> isRefreshing = _isRefreshing;
 
+    private final MutableLiveData<Boolean> _isEditMode = new MutableLiveData<>(false);
+    public LiveData<Boolean> isEditMode = _isEditMode;
+
+    private final MutableLiveData<Integer> _selectedCounter = new MutableLiveData<>(-1);
+    public LiveData<Integer> selectedCounter = _selectedCounter;
+
+    private final MutableLiveData<Boolean> _removeItemDoneSuccess = new MutableLiveData<>(false);
+    public LiveData<Boolean> removeItemDoneSuccess = _removeItemDoneSuccess;
+
     @Override
     protected void onCleared() {
         compositeDisposable.dispose();
@@ -60,4 +71,42 @@ public class BudgetViewModel extends ViewModel {
                     _isRefreshing.postValue(false);
                 }));
     }
+
+
+    public void removeItem(MoneyApi moneyApi, SharedPreferences sharedPreferences, List<MoneyItem> moneyItemList) {
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
+        for (MoneyItem moneyItem : moneyItemList) {
+            if (moneyItem.isSelected()) {
+                compositeDisposable.add(
+                        moneyApi.remove(moneyItem.getId(), authToken)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        () -> {
+                                            _removeItemDoneSuccess.postValue(true);
+                                        },
+                                        error -> {
+                                            _removeItemDoneSuccess.postValue(false);
+                                            _messageString.postValue(error.getLocalizedMessage());
+                                        }
+                                )
+                );
+            }
+        }
+
+
+    }
+
+    public void setEditMode(boolean isEditMode) {
+        _isEditMode.postValue(isEditMode);
+    }
+
+    public void setSelectedItemsCount(int selectedItemsCount) {
+        _selectedCounter.postValue(selectedItemsCount);
+    }
+
+    public void resetSelectedCounter() {
+        _selectedCounter.postValue(-1);
+    }
+
 }
