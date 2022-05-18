@@ -9,6 +9,7 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="login">Login</string>
     <string name="budget_accounting">Учёт бюджета</string>
+    <string name="balance">Баланс</string>
     <string name="delete_items_title">Удаление элементов</string>
     <string name="action_no">Нет</string>
     <string name="action_yes">Да</string>

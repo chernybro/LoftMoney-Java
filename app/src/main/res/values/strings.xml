@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">LoftMoney Java</string>
+<!--    <string name="app_name" translatable="false">LoftMoney Java</string>-->
     <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="add_button_text">Add</string>
@@ -16,5 +16,6 @@
     <string name="action_yes">Yes</string>
     <string name="selected">Selected: %d</string>
     <string name="add_item_title">Add element</string>
+    <string name="balance">Balance</string>
 
 </resources>

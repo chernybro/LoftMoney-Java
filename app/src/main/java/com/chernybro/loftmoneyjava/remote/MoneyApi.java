@@ -1,5 +1,6 @@
 package com.chernybro.loftmoneyjava.remote;
 
+import com.chernybro.loftmoneyjava.remote.models.money.BalanceResponse;
 import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
 
 import java.util.List;
@@ -29,5 +30,8 @@ public interface MoneyApi {
     @FormUrlEncoded
     Completable remove(@Field("id") int id,
                         @Field("auth-token") String token);
+
+    @GET("./balance")
+    Single<BalanceResponse> getBalance(@Query("auth-token") String token);
 
 }
