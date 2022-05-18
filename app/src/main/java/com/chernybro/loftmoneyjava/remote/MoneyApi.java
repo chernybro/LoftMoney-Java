@@ -1,5 +1,6 @@
 package com.chernybro.loftmoneyjava.remote;
 
+import com.chernybro.loftmoneyjava.remote.models.money.BalanceResponse;
 import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
 
 import java.util.List;
@@ -24,5 +25,8 @@ public interface MoneyApi {
                         @Field("name") String name,
                         @Field("type") String type,
                         @Field("auth-token") String token);
+
+    @GET("./balance")
+    Single<BalanceResponse> getBalance(@Query("auth-token") String token);
 
 }
