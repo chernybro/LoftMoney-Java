@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,11 @@ import com.chernybro.loftmoneyjava.remote.MoneyApi;
 import com.google.android.material.textfield.TextInputEditText;
 
 import io.reactivex.disposables.CompositeDisposable;
+
+/**
+ *
+ * gjfdghdfgdfgdfgdfgdf
+ */
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -59,6 +65,8 @@ public class AddItemActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         // При нажатии на кнопочку "назад" вернёмся на предыдущий экран
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        ImageView buttonBack = findViewById(R.id.btn_back);
+        buttonBack.setOnClickListener(view -> onBackPressed());
 
         moneyApi = ((LoftApp) getApplication()).moneyApi;
         addButton.setOnClickListener(new View.OnClickListener() {

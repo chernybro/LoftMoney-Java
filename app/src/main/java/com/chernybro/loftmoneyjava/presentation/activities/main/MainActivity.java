@@ -1,26 +1,41 @@
 package com.chernybro.loftmoneyjava.presentation.activities.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.chernybro.loftmoneyjava.R;
-import com.chernybro.loftmoneyjava.presentation.activities.add_item.AddItemActivity;
-import com.chernybro.loftmoneyjava.presentation.fragments.fragment_balance.BalanceFragment;
-import com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget.BudgetFragment;
+import com.chernybro.loftmoneyjava.presentation.add_item.AddItemActivity;
+import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.BudgetFragment;
+import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.MoneyEditListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditModeListener {
 
     private int currentFragmentPosition = 0;
+
+    private Toolbar toolbar;
+    private ImageView actionBack;
+    private ImageView actionDelete;
+    private TabLayout tabLayout;
+    private TextView actionTitle;
+    private ViewPager2 viewPager;
+    private FloatingActionButton addButton;
 
     private static final int incomeFragmentPosition = 0;
     private static final int expenseFragmentPosition = 1;
@@ -63,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                closeEditMode();
                 currentFragmentPosition = position;
                 if (position == balanceFragmentPosition) {
                     addButton.hide();
@@ -83,7 +99,92 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attach();
 
+        viewPager.setOffscreenPageLimit(2);
+    }
 
+    private void configureActionMode() {
+        toolbar = findViewById(R.id.toolbar);
+        actionBack = findViewById(R.id.btn_back);
+        actionDelete = findViewById(R.id.iv_delete);
+        actionTitle = findViewById(R.id.tv_action_title);
+
+        actionBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeEditMode();
+            }
+        });
+
+        actionDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(getString(R.string.delete_items_title))
+                        .setMessage(getString(R.string.delete_items_message))
+                        .setNegativeButton(R.string.action_no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                clearSelectedItems();
+                            }
+                        })
+                        .show();
+            }
+        });
+
+
+        // находим вью наших "вкладок"
+        tabLayout = findViewById(R.id.tabs);
+    }
+
+    @Override
+    public void onEditModeChanged(boolean status) {
+        if (status) {
+            addButton.hide();
+        } else {
+            addButton.show();
+        }
+
+        toolbar.setBackgroundColor(ContextCompat.getColor(this,
+                status ? R.color.primary_color_second : R.color.primary_color));
+        actionDelete.setVisibility(status ? View.VISIBLE : View.GONE);
+        actionBack.setVisibility(status ? View.VISIBLE : View.GONE);
+        tabLayout.setBackgroundColor(ContextCompat.getColor(this,
+                status ? R.color.primary_color_second : R.color.primary_color));
+
+        Window window = getWindow();
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, status ? R.color.primary_color_second : R.color.primary_color));
+    }
+
+    @Override
+    public void onCounterChanged(int newCount) {
+        if (newCount >= 0) {
+            actionTitle.setText(getString(R.string.selected, newCount));
+        } else {
+            actionTitle.setText(getString(R.string.budget_accounting));
+        }
+    }
+
+    private void closeEditMode() {
+        Fragment fragment = getSupportFragmentManager().getFragments().get(viewPager.getCurrentItem());
+        if (fragment instanceof MoneyEditListener) {
+            ((MoneyEditListener) fragment).onClearEdit();
+        }
+    }
+
+    private void clearSelectedItems() {
+        Fragment fragment = getSupportFragmentManager().getFragments().get(viewPager.getCurrentItem());
+        if (fragment instanceof MoneyEditListener) {
+            ((MoneyEditListener) fragment).onClearSelectedClick();
+        }
     }
 
     // Это обычный адаптер для управления списком, мы создавали адаптер раньше для RecyclerView
@@ -114,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-             return 3; // здесь указываем сколько у нас фрагментов
+            return 2; // здесь указываем сколько у нас фрагментов
         }
     }
 
