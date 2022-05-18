@@ -22,7 +22,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
- *
  * gjfdghdfgdfgdfgdfgdf
  */
 
@@ -58,7 +57,9 @@ public class AddItemActivity extends AppCompatActivity {
         });
 
         addItemViewModel.messageString.observe(this, error -> {
-            Toast.makeText(AddItemActivity.this, error, Toast.LENGTH_SHORT).show();
+            if (!error.isEmpty()) {
+                Toast.makeText(AddItemActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Находим тулбар (верхняя плашка на экране)

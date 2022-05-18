@@ -15,15 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chernybro.loftmoneyjava.LoftApp;
 import com.chernybro.loftmoneyjava.R;
-import com.chernybro.loftmoneyjava.presentation.main.EditModeListener;
-import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
-import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import com.chernybro.loftmoneyjava.presentation.fragments.EditModeListener;
+import com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget.models.MoneyItem;
 
 // Фрагмент - часть пользовательского интерфейса, их может быть несколько на одном экране
 // не может существовать без activity, он к ней прикрепляется
@@ -45,11 +38,11 @@ public class BudgetFragment extends Fragment implements MoneyEditListener {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     // Мы создали этот метод, чтобы при создании фрагмента задавать ему параметры
-    public static BudgetFragment newInstance(final int colorId, final int typeId) {
+    public static BudgetFragment newInstance(final int colorId, final String typeId) {
         BudgetFragment budgetFragment = new BudgetFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(COLOR_ID, colorId);
-        bundle.putInt(TYPE, typeId);
+        bundle.putString(TYPE, typeId);
         budgetFragment.setArguments(bundle);
         return budgetFragment;
     }
@@ -62,7 +55,7 @@ public class BudgetFragment extends Fragment implements MoneyEditListener {
         if (getArguments() != null) {
             // Устанавливаем цвет для который положили в аргументы при создании фрагмента
             adapter = new MoneyItemsAdapter(getArguments().getInt(COLOR_ID));
-            type = getString(getArguments().getInt(TYPE));
+            type = getArguments().getString(TYPE);
         } else {
             adapter = new MoneyItemsAdapter(R.color.purple_500);
         }

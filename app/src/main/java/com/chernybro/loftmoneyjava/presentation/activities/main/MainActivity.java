@@ -15,12 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.chernybro.loftmoneyjava.R;
-import com.chernybro.loftmoneyjava.presentation.add_item.AddItemActivity;
-import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.BudgetFragment;
-import com.chernybro.loftmoneyjava.presentation.main.fragment_budget.MoneyEditListener;
+import com.chernybro.loftmoneyjava.presentation.activities.add_item.AddItemActivity;
+import com.chernybro.loftmoneyjava.presentation.fragments.EditModeListener;
+import com.chernybro.loftmoneyjava.presentation.fragments.fragment_balance.BalanceFragment;
+import com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget.BudgetFragment;
+import com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget.MoneyEditListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -53,12 +57,14 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
         TabLayout tabLayout = findViewById(R.id.tabs);
 
         // инициализуруем пейджер, с помощью него будет листать фрагменты
-        ViewPager2 viewPager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         // Устанавливаем адаптер, он будет управлять списком наших фрагментов
         viewPager.setAdapter(new ViewPagerFragmentAdapter(this));
 
+
+        configureActionMode();
         // Находим кнопку
-        FloatingActionButton addButton = findViewById(R.id.add_button);
+        addButton = findViewById(R.id.add_button);
         // Навешиваем на кнопку листенера для запуска активити добавления элемента в список
         Intent intent = new Intent(this, AddItemActivity.class);
         addButton.setOnClickListener(v -> {
@@ -103,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
     }
 
     private void configureActionMode() {
-        toolbar = findViewById(R.id.toolbar);
-        actionBack = findViewById(R.id.btn_back);
-        actionDelete = findViewById(R.id.iv_delete);
-        actionTitle = findViewById(R.id.tv_action_title);
+        toolbar = findViewById(R.id.toolbarView);
+        actionBack = findViewById(R.id.backButtonView);
+        actionDelete = findViewById(R.id.dashboardActionView);
+        actionTitle = findViewById(R.id.dashboardTitleView);
 
         actionBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements EditModeListener 
 
         @Override
         public int getItemCount() {
-            return 2; // здесь указываем сколько у нас фрагментов
+            return 3; // здесь указываем сколько у нас фрагментов
         }
     }
 

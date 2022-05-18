@@ -1,7 +1,6 @@
 package com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget;
 
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,8 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.chernybro.loftmoneyjava.LoftApp;
 import com.chernybro.loftmoneyjava.presentation.fragments.fragment_budget.models.MoneyItem;
-import com.chernybro.loftmoneyjava.R;
-import com.chernybro.loftmoneyjava.presentation.main.models.MoneyItem;
 import com.chernybro.loftmoneyjava.remote.MoneyApi;
 import com.chernybro.loftmoneyjava.remote.models.money.MoneyItemResponse;
 
